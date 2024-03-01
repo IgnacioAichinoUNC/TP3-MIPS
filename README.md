@@ -39,21 +39,13 @@ El modulo IF contiene una instancia del modulo PC para manejar el contador de pr
 - `wire_next_pc`: Almacena la address dirección de programa calculada.
 
     # Modulo PC
-     
+    El valor del PC se actualiza basado en el estado actual y las señales de entrada.
+    La salida `o_pc` refleja el valor actual del PC.
+    La salida `o_next_pc` calcula el valor del siguiente PC,  agregando 4 bytes (o desplazando `i_nextPC`).
     ##### Params
     
     - `SIZE_ADDR_PC`: 32 bits.
-    
-    ##### Entradas
-    
-    - `i_clk`: Entrada de reloj.
-    - `i_reset`: Entrada de reinicio.
-    - `i_nextPC`: Entrada de la siguiente address del contador de programa (para manejar burbujas sin incrementar en 4).
-    - `i_flag_start_pc`: Indicador de inicio de ejecucion del programa.
-    - `i_enable`: Señal de enable para la etapa IFID y Estados
-    - `i_flag_halt`: Señal que indica un alto recibido desde la unidad de riesgo, terminando la ejecucion del programa.
-    - `i_flag_load_pc`: Señal que indica que no se debe incrementar el contador de programa debido a un bloqueo.
-      
+
     ##### Salidas
     
     - `o_pc`: Valor actual del contador de programa.
@@ -66,10 +58,7 @@ El modulo IF contiene una instancia del modulo PC para manejar el contador de pr
     - `NO_LOAD_PC`: Estado para manejar bloqueos donde el PC no se incrementa. Transicion de regreso a `INCREMENT_PC`.
     - `FINISH_PC`: Estado terminal que indica la finalizacion del programa del modulo. Permanece en este estado en un bucle.
     
-    ##### Logic
-    - El valor del PC se actualiza basado en el estado actual y las señales de entrada.
-    - La salida `o_pc` refleja el valor actual del PC.
-    - La salida `o_next_pc` calcula el valor del siguiente PC,  agregando 4 bytes (o desplazando `i_nextPC`).
+    
     
     
 
