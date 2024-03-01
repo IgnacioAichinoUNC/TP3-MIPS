@@ -35,6 +35,6 @@ module IF #
         .o_next_pc(wire_next_pc)
     );
 
-    assign o_next_pc = next_pc >> 3; //mapeo de bits a bytes
+    assign o_next_pc = wire_next_pc >> 3; //mapeo de bits a bytes
 
 endmodule
