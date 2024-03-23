@@ -13,50 +13,20 @@ Etapas
 
 # Modulo IF
 
-#### Params
-
-- `SIZE_PC`: 32 bits.
-
-##### Entradas
-
-- `i_clk`: Entrada de reloj.
-- `i_reset`: Entrada de reinicio.
-- `i_flag_start_pc`: Indica el inicio de la ejecucion del programa.
-- `i_next_pc`: Siguiente address de programa.
-- `i_enable`: Habilita la etapa IFID y activa los estados del PC.
-- `i_flag_halt`: Señal de alto recibida desde la unidad de riesgo, terminando la ejecucion del programa.
-- `i_flag_load_pc`: Indica que no se debe incrementar el contador de programa debido a un bloqueo.
-
-#### Salidas
-
-- `o_next_pc`: Siguiente address de programa.
-
 #### Comportamiento
 
-El modulo IF contiene una instancia del modulo PC para manejar el contador de programa y calcular la siguiente address de instruccion.
+El modulo IF contiene una instancia del modulo PC para manejar el contador de programa y calcular la siguiente address de instruccion. También permite almacenar instrucciones dentro de la memoria. Ya que las intrucciones son cargadas por la Unidad de de Debug.
 
-- `wire_pc_memory`: Almacena la address actual del contador de programa.
-- `wire_next_pc`: Almacena la address dirección de programa calculada.
+Mediante un Multiplexor se obtiene el PC correspondiente, podemos tener el caso que en la etapa siguiente el PC sea un PC+4 o corresponda a un _branch_ (PC consecuente de la ejecución de una instrucción de salto)
 
-    # Modulo PC
-    El valor del PC se actualiza basado en el estado actual y las señales de entrada.
-    La salida `o_pc` refleja el valor actual del PC.
-    La salida `o_next_pc` calcula el valor del siguiente PC,  agregando 4 bytes (o desplazando `i_nextPC`).
-    ##### Params
-    
-    - `SIZE_ADDR_PC`: 32 bits.
+El valor del PC se actualiza basado en el estado actual y las señales de entrada como lo es _i_enable_ que habilita la etepa IFID y estamos en condiciones de obtener a la salida del modulo una direccion de memoria para obtener la siguiente instruccion. 
 
-    ##### Salidas
-    
-    - `o_pc`: Valor actual del contador de programa.
-    - `o_next_pc`: Valor del siguiente contador de programa.
-    
-    ##### Estados
-    
-    - `IDDLE`: Estado inicial donde el PC se reinicia a 0. Transicion a `INCREMENT_PC` cuando se recibe la señal i_flag_start_pc.
-    - `INCREMENT_PC`: Estado para incrementar el PC. Transicion a `FINISH_PC` cuando se recibe la señal i_flag_halt `NO_LOAD_PC` cuando se detecta un bloqueo. De lo contrario, incrementa el PC basado en `i_nextPC`.
-    - `NO_LOAD_PC`: Estado para manejar bloqueos donde el PC no se incrementa. Transicion de regreso a `INCREMENT_PC`.
-    - `FINISH_PC`: Estado terminal que indica la finalizacion del programa del modulo. Permanece en este estado en un bucle.
+Tambien disponemos de un modulo que se encarga de incrementar el valor de PC en 4 y del modulo de la Memory Instruccion que se encarga de almancenar las instrucciones recibidas de la unidad de debug y la obtencion de la instruccion correpondiente a partir de un PC. 
+
+![IF](img/IF.png)
+
+
+
     
     
     
